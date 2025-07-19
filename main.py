@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 import os
 from pygame.locals import *
 
-# 加载.env文件
-load_dotenv()
+# show Chinese IME UI
+os.environ["SDL_IME_SHOW_UI"] = "1"
 
-# 获取环境变量
+load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 openai_api_endpoint = os.getenv("OPENAI_API_ENDPOINT")
 
@@ -91,7 +91,6 @@ def draw_dialogue_box():
     if not dialogue_active:
         return
 
-    # 绘制半透明背景
     s = pygame.Surface((800, 200))
     s.set_alpha(200)
     s.fill(WHITE)
@@ -126,15 +125,13 @@ def draw_dialogue_box():
 running = True
 while running:
     screen.fill(WHITE)
-    # 绘制角色
+
     player.draw(screen)
     npc1.draw(screen)
     npc2.draw(screen)
 
-    # 绘制对话界面
     draw_dialogue_box()
 
-    # 非对话状态下的提示
     if not dialogue_active:
         prompt = font.render("靠近NPC按空格键开始对话", True, BLACK)
         screen.blit(prompt, (300, 550))
@@ -142,7 +139,6 @@ while running:
     pygame.display.flip()
     clock.tick(30)
 
-    # 移动人物
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -150,7 +146,6 @@ while running:
         # 鼠标点击事件 - 激活/取消激活输入框
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if dialogue_active:
-                # 检查是否点击了输入框
                 input_box_rect = pygame.Rect(10, 470, 780, 30)
                 if input_box_rect.collidepoint(event.pos):
                     print("输入框被点击")
